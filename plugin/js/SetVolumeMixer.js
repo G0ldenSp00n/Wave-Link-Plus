@@ -76,6 +76,10 @@ function SetVolumeMixer(inContext, inSettings) {
                     layerOrder: ["background", "icon", "mute"]
                 });
 
+                if (selectedState === 1) {
+                    this.svgIcon.layerOrder = ["background", "icon", "mute"];
+                }
+
                 this.svgIcon.backgroundColor = mixer.bgColor;
                 this.svgIcon2.backgroundColor = mixer.bgColor;
 

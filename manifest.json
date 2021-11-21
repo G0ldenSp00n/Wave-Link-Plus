@@ -47,7 +47,7 @@
     "Name": "Wave Link Plus",
     "Icon": "images/actionspng/waveLink_appIcon_store",
     "URL": "https://elgato.com/wave-3",
-    "Version": "0.0.1",
+    "Version": "0.0.2",
     "OS": [
         {
             "Platform": "mac",
