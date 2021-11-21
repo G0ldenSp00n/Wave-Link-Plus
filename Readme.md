@@ -8,3 +8,8 @@
 ### Known Issues
 - Stream Deck icons don't always stay highlighted to indicate the active channel
 - Only the headphone output can be control, selecting "Stream Mix" in Stream Deck software will still control the "Monitor Mix"
+
+### Installation
+- Go to the [releases page](https://github.com/G0ldenSp00n/Wave-Link-Plus/releases) of this repo
+- Download the latest .streamDeckPlugin file
+- Install the plugin
