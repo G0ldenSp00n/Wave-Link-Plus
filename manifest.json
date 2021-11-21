@@ -1,0 +1,72 @@
+{
+    "Actions": [
+        {
+            "Icon": "images/iconspng/waveLink_action_setChannelVolume",
+            "Name": "Control Input Volume",
+            "States": [
+                {
+                    "Image": "images/actionspng/Wavelink"
+                },
+                {
+                    "Image": "images/actionspng/Wavelink"
+                }
+            ],
+            "Tooltip": "Using the WaveMic Knob Control Input Volume",
+            "UUID": "com.g0ldensp00n.wavelinkplus.controlvolumemixer"
+        }
+    ],
+    "Profiles": [
+        {
+            "Name": "Wave Link 1",
+            "DeviceType": 0
+        },
+        {
+            "Name": "Wave Link 2",
+            "DeviceType": 0
+        },
+        {
+            "Name": "Wave Link XL",
+            "DeviceType": 2
+        },
+        {
+            "Name": "Wave Link 1",
+            "DeviceType": 3
+        },
+        {
+            "Name": "Wave Link 2",
+            "DeviceType": 3
+        }
+    ],
+    "SDKVersion": 2,
+    "Author": "G0ldenSp00n",
+    "CodePath": "index.html",
+    "PropertyInspectorPath": "pi/index.html",
+    "Description": "Control the Elgato Wave Link audio mixing application.",
+    "Category": "Wave Link Plus",
+    "CategoryIcon": "images/iconspng/waveLink_category",
+    "Name": "Wave Link Plus",
+    "Icon": "images/actionspng/waveLink_appIcon_store",
+    "URL": "https://elgato.com/wave-3",
+    "Version": "0.0.1",
+    "OS": [
+        {
+            "Platform": "mac",
+            "MinimumVersion": "10.14"
+        },
+        {
+            "Platform": "windows",
+            "MinimumVersion": "10"
+        }
+    ],
+    "ApplicationsToMonitor": {
+        "mac": [
+            "com.elgato.WaveLink"
+        ],
+        "windows": [
+            "WaveLink.exe"
+        ]
+    },
+    "Software": {
+        "MinimumVersion": "4.8"
+    }
+}

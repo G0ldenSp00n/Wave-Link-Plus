@@ -1,0 +1,129 @@
+{
+    "Name": "Wave Link Plus",
+    "Category": "Wave Link",
+    "Description": "Control the Elgato Wave Link audio mixing application.",
+
+    "com.elgato.wavelink.mixermute": {
+        "Name": "Mute Input",
+        "Tooltip": "Mute/unmute input"
+    },
+    "com.g0ldensp00n.wavelinkplus.controlvolumemixer": {
+        "Name": "Control Input Volume",
+        "Tooltip": "Using the WaveMic Knob Control Input Volume"
+    },
+    "com.elgato.wavelink.adjustvolumemixer": {
+        "Name": "Adjust Input Volume",
+        "Tooltip": "Adjust input level in increments"
+    },
+    "com.elgato.wavelink.monitormute": {
+        "Name": "Mute Output",
+        "Tooltip": "Mute/unmute output"
+    },
+    "com.elgato.wavelink.setvolumemonitor": {
+        "Name": "Set Output Volume",
+        "Tooltip": "Set specific output level"
+    },
+    "com.elgato.wavelink.adjustvolumemonitor": {
+        "Name": "Adjust Output Volume",
+        "Tooltip": "Adjust output level in increments"
+    },
+    "com.elgato.wavelink.switchprofiles": {
+        "Name": "Switch Profiles",
+        "Tooltip": "Switch profiles"
+    },
+    "com.elgato.wavelink.switchmonitoring": {
+        "Name": "Toggle Monitoring",
+        "States": [
+            {
+                "Name": "Local"
+            },
+            {
+                "Name": "Stream"
+            }
+        ],
+        "Tooltip": "Listen to monitor or stream mix"
+    },
+    "com.elgato.wavelink.setmonitormixoutput" : {
+        "Name": "Set Monitor Mix",
+        "Tooltip": "Set monitor mix to a specific output"
+    },
+    "com.elgato.wavelink.togglemonitormixoutput" : {
+        "Name": "Toggle Monitor Mix",
+        "Tooltip": "Toggle between two monitor mix outputs"
+    },
+    "com.elgato.wavelink.setmicsettings": {
+        "Name": "Microphone Settings",
+        "Tooltip": "Configure specific microphone settings"
+    },
+    "Localization": {
+        "PI": {
+            "msg_notice_toLaunchApp": "Please launch Wave Link",
+            "msg_notice_toUpdateApp": "Please update Wave Link to a newer version",
+            "micSettings": { 
+                "label": "Action",
+                "none": "Please select…",
+                "adjustGain": "Adjust Gain",
+                "setGain": "Set Gain",
+                "adjustOutput": "Adjust Output Volume",
+                "setOutput": "Set Output Volume",
+                "adjustMic/PcBalance": "Adjust Mic/PC Mix",
+                "setMic/PcBalance": "Set Mic/PC Mix",
+                "setLowcut": "Toggle Lowcut",
+                "setClipguard": "Toggle Clipguard"
+            },
+            "setOutput": {
+                "label": "Monitor Mix"
+            },
+            "toggleOutput": {
+                "labelPrimary": "Primary",
+                "labelSecondary": "Secondary"
+            },
+            "outputSelection": {
+                "label": "Output",
+                "local": "Monitor Mix",
+                "stream": "Stream Mix",
+                "all": "All"
+            },
+            "volumeSelection": {
+                "label": "Step Size",
+                "mic": " (Mic)",
+                "pc": " (PC)"
+            },
+            "volumeRange": {
+                "setGain": "Gain",
+                "setMicPC": "Mix",
+                "setVol": "Volume",
+                "mic": "Mic",
+                "pc": "PC"
+            },
+            "fadingSelection": {
+                "label": "Fading",
+                "off": "Off",
+                "500ms": "0.5",
+                "1000ms": "1.0",
+                "1500ms": "1.5",
+                "2000ms": "2.0",
+                "2500ms": "2.5",
+                "3000ms": "3.0",
+                "unit": " sec"
+            },
+            "mixerSelection": {
+                "label": "Input"
+            },
+            "linkInputs": {
+                "label": "Link Faders",
+                "on": "On",
+                "off": "Off"
+            },
+            "switchProfile": {
+                "label": "Switch to"
+            }
+        },
+        "Actions": {
+                "mixerMute": {
+                "percentFirst": "",
+                "percentLast": " %"
+            }
+        }
+    }
+}

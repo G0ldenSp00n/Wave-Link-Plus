@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 288 288" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <rect x="0" y="0" width="288" height="288" style="fill:white;"/>
+    <rect id="Background" x="0" y="0" width="288" height="288" style="fill:rgb(181,33,255);"/>
+    <g id="folder" transform="matrix(4,0,0,4,-312,-1436)">
+        <g transform="matrix(0.25,0,0,0.25,78,359)">
+            <path d="M248,208C248,214.623 242.623,220 236,220L52,220C45.377,220 40,214.623 40,208L40,80L248,80L248,208Z" style="fill:white;fill-opacity:0.3;"/>
+        </g>
+        <g transform="matrix(0.25,0,0,0.25,78,359)">
+            <path d="M96,72L256,72L256,208C256,219.038 247.038,228 236,228L52,228C40.962,228 32,219.038 32,208L32,72L40,72L40,56L96,56L96,72ZM248,208C248,214.623 242.623,220 236,220L52,220C45.377,220 40,214.623 40,208L40,80L248,80L248,208ZM88,72L88,64L48,64L48,72L88,72Z" style="fill-opacity:0.5;"/>
+        </g>
+        <g transform="matrix(1.42857,0,0,2,-38.5714,-357)">
+            <rect x="90" y="366" width="7" height="1" style="fill:white;fill-opacity:0.6;"/>
+        </g>
+    </g>
+    <g id="Input---Browser" serif:id="Input-/-Browser" transform="matrix(0.715686,0,0,0.715686,42.6471,45.1569)">
+        <path id="Icon-Fill" d="M232,116L232,204L56,204L56,116L232,116ZM232,88.2L232,108.2L108,108.2L108,88.2L232,88.2ZM66,92C69.314,92 72,94.686 72,98C72,101.314 69.314,104 66,104C62.686,104 60,101.314 60,98C60,94.686 62.686,92 66,92ZM90,92C93.314,92 96,94.686 96,98C96,101.314 93.314,104 90,104C86.686,104 84,101.314 84,98C84,94.686 86.686,92 90,92Z" style="fill:white;fill-opacity:0.6;fill-rule:nonzero;"/>
+        <path id="shadow-with-outline" d="M228,80C234.391,80 239.615,84.996 239.98,91.295L240,92C246.627,92 252,97.373 252,104L252,212C252,218.627 246.627,224 240,224L72,224C65.373,224 60,218.627 60,212C53.373,212 48,206.627 48,200L48,92C48,85.373 53.373,80 60,80L228,80ZM232,116L56,116L56,204L232,204L232,116ZM232,88.2L108,88.2L108,108.2L232,108.2L232,88.2ZM66,92C62.686,92 60,94.686 60,98C60,101.314 62.686,104 66,104C69.314,104 72,101.314 72,98C72,94.686 69.314,92 66,92ZM90,92C86.686,92 84,94.686 84,98C84,101.314 86.686,104 90,104C93.314,104 96,101.314 96,98C96,94.686 93.314,92 90,92Z" style="fill-rule:nonzero;"/>
+    </g>
+</svg>
