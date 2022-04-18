@@ -22,8 +22,12 @@ class WaveLinkClient {
 
         this.UP_MAC = system == 'mac' ? true : false; 
         this.UP_WINDOWS = system == 'windows' ? true : false;
-        
-        this.minimumBuild = this.UP_WINDOWS ? 2023 : 2196;
+
+        this.minimumMajorRelease = 1;
+        this.minimumMinorRelease = 4;
+        this.minimumPatch = 1;
+        this.minimumBuild = this.UP_WINDOWS ? 2758 : 2913;
+
         this.isWLUpToDate = false;
 
         this.appIsRunning = false;
@@ -135,28 +139,31 @@ class WaveLinkClient {
         );
 
         this.rpc.on("inputMixerChanged", 
-            ["mixerName", "mixId", "bgColor", "isLinked", "deltaLinked", "localVolumeIn", "streamVolumeIn", "isLocalInMuted", "isStreamInMuted", "isAvailable"], 
-            (mixerName, mixerId, bgColor, isLinked, deltaLinked, localVolumeIn, streamVolumeIn, isLocalInMuted, isStreamInMuted, isAvailable) => {
+            ["mixerName", "mixId", "bgColor", "isLinked", "deltaLinked", "localVolumeIn", "streamVolumeIn", "isLocalInMuted", "isStreamInMuted", "isAvailable", "filters", "localMixFilterBypass", "streamMixFilterBypass", "iconData", "inputType"], 
+            (mixerName, mixerId, bgColor, isLinked, deltaLinked, localVolumeIn, streamVolumeIn, isLocalInMuted, isStreamInMuted, isAvailable, filters, localMixFilterBypass, streamMixFilterBypass, iconData, inputType) => {
                 this.mixers.forEach(mixer => {
                     if (mixer.mixerId == mixerId) {
-                        mixer.name             = mixerName;
-                        mixer.bgColor          = bgColor;
-                        mixer.localVolIn       = localVolumeIn;
-                        mixer.streamVolIn      = streamVolumeIn;
-                        mixer.isLinked         = isLinked;
-                        mixer.deltaLinked      = deltaLinked;
-                        
-                        mixer.isLocalMuteIn    = isLocalInMuted;
-                        mixer.isStreamMuteIn   = isStreamInMuted;
+                        mixer.name                  = mixerName;
+                        mixer.bgColor               = bgColor;
+                        mixer.localVolIn            = localVolumeIn;
+                        mixer.streamVolIn           = streamVolumeIn;
 
-                        mixer.isAvailable      = isAvailable;
+                        mixer.isLocalMuteIn         = isLocalInMuted;
+                        mixer.isStreamMuteIn        = isStreamInMuted;
 
-                        if (mixer.deltaLinked > 0) {
-                            mixer.topSlider = "local";
-                        } 
-                        else if (mixer.deltaLinked < 0) {
-                            mixer.topSlider = "stream";
+                        mixer.isAvailable           = isAvailable;
+
+                        if (mixer.filters != filters) {
+                            mixer.filters           = filters;
+                            this.awl.updatePI();
                         }
+                        
+                        mixer.localMixFilterBypass  = localMixFilterBypass;
+                        mixer.streamMixFilterBypass = streamMixFilterBypass;
+
+                        mixer.iconData              = iconData;
+                        mixer.inputType             = inputType;
+
                         this.mixerVolChanged(mixerId);     
                     }
                 });
@@ -307,8 +314,6 @@ class WaveLinkClient {
         // init vars based on the mixertyp
         var localVol,
             streamVol,
-            deltaLinked,
-            isLinked,
             slider = inSlider;
 
         if (mixerTyp == "input") {
@@ -316,8 +321,6 @@ class WaveLinkClient {
                 if (mixer.mixerId == mixerId) {
                     localVol    = mixer.localVolIn;
                     streamVol   = mixer.streamVolIn;
-                    deltaLinked = mixer.deltaLinked;
-                    isLinked    = mixer.isLinked;
                 }  
             });
         }
@@ -327,40 +330,13 @@ class WaveLinkClient {
         }
 
         // adjust volume based on inputtyp
-        if (slider == "local" && !isLinked) {
+        if (slider == "local") {
             localVol = localVol + vol;
         } 
-        else if (slider == "stream" && !isLinked) {
+        else if (slider == "stream") {
             streamVol = streamVol + vol;
         } 
-        else if (isLinked) {
-            const topSlider = deltaLinked > 0 ? "stream" : "local";
 
-            switch(vol > 0) {
-                case (true):
-                    if (topSlider == "local") {
-                        localVol = localVol + vol;
-                        slider = "local";
-                    } else if (topSlider == "stream") {
-                        streamVol = streamVol + vol;
-                        slider = "stream";
-                    }
-                    break;
-                case (false):
-                    if (topSlider == "local") {
-                        streamVol = streamVol + vol;
-                        slider = "stream";
-                    }
-                    else if (topSlider == "stream") {
-                        localVol = localVol + vol;
-                        slider = "local";
-                    }
-                    break;           
-                default:
-                    break;
-            }
-
-        }
         // adjust volume based on the mixertyp
         if (mixerTyp == "input") {
             this.mixers.forEach(mixer => {
@@ -431,35 +407,58 @@ class WaveLinkClient {
             }, this.fadingDelay)
         } 
     }
+
+    setFilter(mixerID, filterID) {  
+        this.mixers.forEach(mixer => {
+            if (mixer.mixerId == mixerID)
+            {
+                const filter = mixer.filters.find(f => f.filterID == filterID);
+                filter.active = !filter.active;
+                this.setInputMixer(mixer.mixerId, mixer.topSlider);
+            }
+        });
+    }
+
+    setFilterBypass(mixerID, slider) {
+        const mixer = this.getMixer(mixerID);
+        
+        if (slider == "all") {
+            if (localMute == streamMute) 
+                mixer.localMixFilterBypass = mixer.streamMixFilterBypass = !mixer.localMixFilterBypass;
+            else
+                mixer.localMixFilterBypass = mixer.streamMixFilterBypass = true;
+        } else if (slider == "local")
+            mixer.localMixFilterBypass = !mixer.localMixFilterBypass;
+        else if (slider == "stream")
+            mixer.streamMixFilterBypass = !mixer.streamMixFilterBypass;
+
+        this.setInputMixer(mixer.mixerId, slider);
+    }
  
     setInputMixer(mixId, slider) {
         this.mixers.forEach(mixer => {
             if (mixer.mixerId == mixId) {
-                var mixerId     = mixer.mixerId,
-                    localVol    = mixer.localVolIn,
-                    localMute   = mixer.isLocalMuteIn,
-                    streamVol   = mixer.streamVolIn,
-                    streamMute  = mixer.isStreamMuteIn,
-                    isLinked    = mixer.isLinked;
-                
                 this.rpc.call("setInputMixer", {
-                    "mixId": mixerId,
-                    "slider": slider,
-                    "isLinked": isLinked,
-                    "localVolumeIn": localVol,
-                    "isLocalInMuted": localMute,
-                    "streamVolumeIn": streamVol,
-                    "isStreamInMuted": streamMute
+                    "mixId":                 mixer.mixerId,
+                    "slider":                slider,
+                    "localVolumeIn":         mixer.localVolIn,
+                    "isLocalInMuted":        mixer.isLocalMuteIn,
+                    "streamVolumeIn":        mixer.streamVolIn,
+                    "isStreamInMuted":       mixer.isStreamMuteIn,
+                    "filters":               mixer.filters,
+                    "localMixFilterBypass":  mixer.localMixFilterBypass,
+                    "streamMixFilterBypass": mixer.streamMixFilterBypass
                 }).then((result) => {
-                    mixer.isAvailable      = result["isAvailable"];
-                    mixer.isLinked         = result["isLinked"];
-                    mixer.deltaLinked      = result["deltaLinked"]
-                    mixer.localVolIn       = result["localVolumeIn"];
-                    mixer.isLocalMuteIn    = result["isLocalInMuted"];
-                    mixer.streamVolIn      = result["streamVolumeIn"];
-                    mixer.isStreamMuteIn   = result["isStreamInMuted"];
-                    this.emit("inputMixerChanged", mixerId);
-                    });
+                    mixer.isAvailable           = result["isAvailable"];
+                    mixer.localVolIn            = result["localVolumeIn"];
+                    mixer.isLocalMuteIn         = result["isLocalInMuted"];
+                    mixer.streamVolIn           = result["streamVolumeIn"];
+                    mixer.isStreamMuteIn        = result["isStreamInMuted"];
+                    mixer.localMixFilterBypass  = result["localMixFilterBypass"];
+                    mixer.streamMixFilterBypass = result["streamMixFilterBypass"];
+                    mixer.filters               = result["filters"];                    
+                    this.emit("inputMixerChanged", mixer.mixerId);
+                });
             }
         });
     }
@@ -485,16 +484,33 @@ class WaveLinkClient {
     }
 
     // Request
-
     getApplicationInfo() {
         this.rpc.call('getApplicationInfo').then((result) => {
             if (result || result == undefined) {
                 if (result['appName'] == 'Elgato Wave Link') {
                     debug('Wave Link WebSocketServer found.');
+                    
+                    try {
+                        if (this.minimumMajorRelease <= result['appVersion']['appVersionMajorRelease']) {
+                            if (this.minimumMinorRelease <= result['appVersion']['appVersionMinorRelease']) {
+                                if (this.minimumPatch <= result['appVersion']['appVersionPatchLevel']) {
+                                    this.isWLUpToDate = true;
+                                }
+                            }
+                        }
+                        
+                    } catch (e) {
+                        debug('ERROR: Outdated version check.');
+                        try {
+                            if (this.minimumBuild <= parseInt(result['version'].match(/\((.*)\)/).pop()))
+                                this.isWLUpToDate = true;
 
-                    var versionNumber = result['version'];
+                        } catch (e) {
+                            debug("ERROR: Version check failed.")
+                        }
+                    }                     
 
-                    if ( /*versionNumber.includes("(") && */(this.minimumBuild <= parseInt(versionNumber.match(/\((.*)\)/).pop())) ) {
+                    if (this.isWLUpToDate) {
                         debug("Minimum WL version or above found.");
                         this.getMicrophoneState();
                         this.getMicrophoneSettings();
@@ -503,11 +519,9 @@ class WaveLinkClient {
                         this.getMonitoringState();
                         this.getMixers();
                         this.isConnected = true;
-                        this.isWLUpToDate = true;
                     } else {
                         debug("Please update WL-Version");
                         this.isConnected = true;
-                        this.isWLUpToDate = false;
                         this.awl.updatePI();
                     }
                 } else {
@@ -655,8 +669,6 @@ class WaveLinkClient {
                     inputType: e.inputType,
                     localVolIn: e.localVolumeIn,
                     streamVolIn: e.streamVolumeIn,
-                    isLinked: e.isLinked,
-                    deltaLinked: e.deltaLinked,
                     isLocalMuteIn: e.isLocalInMuted,
                     isStreamMuteIn: e.isStreamInMuted,
                     isAvailable: e.isAvailable,
@@ -664,9 +676,11 @@ class WaveLinkClient {
                     isNotBlockedStream: true,
                     bgColor: e.bgColor,
                     icon: icon,
-                    iconData: e.iconData
+                    iconData: e.iconData,
+                    filters: e.filters,
+                    localMixFilterBypass: e.localMixFilterBypass,
+                    streamMixFilterBypass: e.streamMixFilterBypass
                 };
-
                     return mix;
                 }
             );    
