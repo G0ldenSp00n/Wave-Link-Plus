@@ -490,9 +490,13 @@ class WaveLinkClient {
                 if (result['appName'] == 'Elgato Wave Link') {
                     debug('Wave Link WebSocketServer found.');
                     
-                    try {
-                        if (this.minimumMajorRelease <= result['appVersion']['appVersionMajorRelease']) {
-                            if (this.minimumMinorRelease <= result['appVersion']['appVersionMinorRelease']) {
+                    try {                     
+                        if (this.minimumMajorRelease < result['appVersion']['appVersionMajorRelease']) {
+                            this.isWLUpToDate = true;
+                        } else {
+                            if (this.minimumMinorRelease < result['appVersion']['appVersionMinorRelease']) {
+                                this.isWLUpToDate = true;
+                            } else {
                                 if (this.minimumPatch <= result['appVersion']['appVersionPatchLevel']) {
                                     this.isWLUpToDate = true;
                                 }
@@ -781,5 +785,4 @@ class WaveLinkClient {
         });
             
     };
-
 };
